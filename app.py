@@ -1,4 +1,4 @@
-from vector_store import VectorStore
+from VectorMass.vector_store import VectorStore
 import numpy as np
 
 # Create a VectorStore instance
