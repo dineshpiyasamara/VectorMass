@@ -14,10 +14,16 @@ setup(
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=LONG_DESCRIPTION,
+    url="https://github.com/dineshpiyasamara/VectorMass",
+    license="MIT",
     packages=find_packages(),
     install_requires=['numpy'],
+    extras_requires={
+        "dev": ["pytest", "twine"]
+    },
     keywords=['vector database', 'vector store'],
     classifiers=[
+        "License :: OSI Approved :: MIT License",
         "Development Status :: 1 - Planning",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
