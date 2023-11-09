@@ -3,6 +3,9 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as f:
     LONG_DESCRIPTION = f.read()
 
+with open('requirements.txt') as f:
+    required_libraries = f.read().splitlines()
+
 VERSION = '0.0.1'
 DESCRIPTION = 'Highly flexible vector store'
 
@@ -17,7 +20,7 @@ setup(
     url="https://github.com/dineshpiyasamara/VectorMass",
     license="MIT",
     packages=find_packages(),
-    install_requires=['numpy'],
+    install_requires=required_libraries,
     extras_requires={
         "dev": ["pytest", "twine"]
     },

@@ -1,10 +1,18 @@
 import numpy as np
+from .db_connection import (DatabaseConnection)
+from VectorMass.config.configuration import ConfigurationManager
 
+config_manager = ConfigurationManager()
+config = config_manager.database_config()
+
+db_conn = DatabaseConnection(config=config)
 
 class VectorStore:
     def __init__(self):
         self.vector_data = {}  # A dictionary to store vectors
         self.vector_index = {}  # An indexing structure for retrieval
+        self.conn = db_conn.create_connection()
+        print(self.conn)
 
     def add_vector(self, vector_id, vector):
         """
