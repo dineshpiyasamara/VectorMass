@@ -1,4 +1,4 @@
-from .components.vector_store import VectorStore
+from .components.vector_store import Client
 
 # from .vector_store import (
 #     add_vector,

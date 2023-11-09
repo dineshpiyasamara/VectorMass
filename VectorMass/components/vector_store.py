@@ -1,18 +1,54 @@
 import numpy as np
-from .db_connection import (DatabaseConnection)
+import sqlite3
+from sqlite3 import Error
+import os
+from .collection_operations import (Collection)
 from VectorMass.config.configuration import ConfigurationManager
+from VectorMass.queries.queries import *
+from VectorMass.utils.common import read_yaml, create_directories
 
 config_manager = ConfigurationManager()
 config = config_manager.database_config()
 
-db_conn = DatabaseConnection(config=config)
-
-class VectorStore:
-    def __init__(self):
+class Client:
+    def __init__(self, db_path=''):
         self.vector_data = {}  # A dictionary to store vectors
         self.vector_index = {}  # An indexing structure for retrieval
-        self.conn = db_conn.create_connection()
+
+        self.config = config
+        self.conn = self._create_connection(db_path)
+        self.cursor = self.conn.cursor()
         print(self.conn)
+
+    def _create_connection(self, db_path):
+        """ create a database connection to a SQLite database """
+        conn = None
+        try:
+            if db_path != '' and not os.path.exists(db_path):
+                create_directories([db_path])
+
+            db_path = os.path.join(db_path, self.config.db_name)
+            conn = sqlite3.connect(db_path)
+        except Error as e:
+            print(e)
+        finally:
+            return conn
+
+    def create_or_get_collection(self, collection_name):
+        # Check if the collection already exists
+        self.cursor.execute(check_collection_exist, (collection_name,))
+        collection_exists = self.cursor.fetchone()
+
+        if collection_exists:
+            print(f"Collection '{collection_name}' already exists.")
+        else:
+            # Create the collection if it doesn't exist
+            self.cursor.execute(create_collection.format(collection_name))
+            print(f"Collection '{collection_name}' created.")
+        self.conn.commit()
+        collection = Collection(conn=self.conn, cursor=self.cursor)
+        return collection
+
 
     def add_vector(self, vector_id, vector):
         """

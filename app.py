@@ -1,8 +1,11 @@
-from VectorMass import VectorStore
+import VectorMass
 import numpy as np
 
 # Create a VectorStore instance
-vector_store = VectorStore()
+vector_store = VectorMass.Client()
+
+collection = vector_store.create_or_get_collection("coll_name")
+print(collection)
 
 # Define your sentences
 sentences = [
