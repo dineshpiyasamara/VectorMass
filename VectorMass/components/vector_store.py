@@ -36,18 +36,49 @@ class Client:
 
     def create_or_get_collection(self, collection_name):
         # Check if the collection already exists
-        self.cursor.execute(check_collection_exist, (collection_name,))
+        self.cursor.execute(CHECK_COLLECTION_EXIST, (collection_name,))
         collection_exists = self.cursor.fetchone()
 
         if collection_exists:
             print(f"Collection '{collection_name}' already exists.")
         else:
             # Create the collection if it doesn't exist
-            self.cursor.execute(create_collection.format(collection_name))
+            self.cursor.execute(CREATE_COLLECTION.format(collection_name))
             print(f"Collection '{collection_name}' created.")
         self.conn.commit()
-        collection = Collection(conn=self.conn, cursor=self.cursor)
+        collection = Collection(conn=self.conn, cursor=self.cursor, collection_name=collection_name)
         return collection
+    
+
+    def create_collection(self, collection_name):
+        # Check if the collection already exists
+        self.cursor.execute(CHECK_COLLECTION_EXIST, (collection_name,))
+        collection_exists = self.cursor.fetchone()
+
+        if collection_exists:
+            print(f"Collection '{collection_name}' already exists.")
+        else:
+            # Create the collection if it doesn't exist
+            self.cursor.execute(CREATE_COLLECTION.format(collection_name))
+            print(f"Collection '{collection_name}' created.")
+        
+        self.conn.commit()
+
+
+    def get_collection(self, collection_name):
+        # Check if the collection already exists
+        self.cursor.execute(CHECK_COLLECTION_EXIST, (collection_name,))
+        collection_exists = self.cursor.fetchone()
+
+        if collection_exists:
+            print(f"Collection '{collection_name}' already exists.")
+            collection = Collection(conn=self.conn, cursor=self.cursor, collection_name=collection_name)
+            return collection
+        else:
+            print(f"Collection '{collection_name}' not found.")
+            return None
+
+
 
 
     def add_vector(self, vector_id, vector):
