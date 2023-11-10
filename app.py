@@ -45,12 +45,12 @@ print(ids)
 print(sentences)
 print(embeddings)
 
-# collection.add(
-#     ids= ids,
-#     embeddings= embeddings,
-#     documents=sentences
-# )
-
+collection.add(
+    ids= ids,
+    embeddings= embeddings,
+    documents=sentences
+)
+ids = ['id1', 'id4']
 res = collection.get(ids)
 print(type(res['embeddings'][0]))
 

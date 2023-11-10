@@ -16,11 +16,16 @@ class Collection:
             id = f"'{ids[i]}'"
             document = f"'{documents[i]}'"
             embedding = f"'{list(embeddings[i])}'"
-            print(id, document, embedding)
-            print(type(id), type(document), type(embedding))
-            query = INSERT_RECORD.format(self.collection_name, id, document, embedding)
-            print(query)
-            self.cursor.execute(query)
+
+            query_to_check_exist = CHECK_ID_EXIST.format(self.collection_name, id)
+
+            check_exist = self.cursor.execute(query_to_check_exist).fetchone()[0]
+            if check_exist > 0:
+                print(f"{id} already exist")
+            else:
+                query = INSERT_RECORD.format(self.collection_name, id, document, embedding)
+                print(query)
+                self.cursor.execute(query)
 
         self.conn.commit()
         print("Data inserted.")
