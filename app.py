@@ -50,9 +50,30 @@ collection.add(
     embeddings= embeddings,
     documents=sentences
 )
-ids = ['id1', 'id4']
-res = collection.get(ids)
-print(type(res['embeddings'][0]))
+
+# collection.update(
+#     ids = ['id2'],
+#     embeddings=[[0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]],
+#     documents= ['i am dinesh']
+# )
+
+
+# ids = ['id2', 'id4']
+# res = collection.get(ids)
+# print(type(res['embeddings'][0]))
+# print(res)
+
+# res = collection.get_one('id2')
+# print(res)
+
+result = collection.get_all()
+print(result)
+
+result = collection.delete(['id1', 'id3'])
+print(result)
+
+result = collection.get_all()
+print(result)
 
 # # Storing in VectorStore
 # for sentence, vector in sentence_vectors.items():
