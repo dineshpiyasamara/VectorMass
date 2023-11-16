@@ -1,7 +1,13 @@
 import numpy as np
 from VectorMass.queries.queries import *
 from VectorMass.config.configuration import ConfigurationManager
+from sentence_transformers import SentenceTransformer
 import ast
+
+config_manager = ConfigurationManager()
+config = config_manager.embedding_config()
+
+model = SentenceTransformer(config.default_embedding_model)
 
 class Collection:
     def __init__(self, conn, cursor, collection_name):
@@ -11,7 +17,10 @@ class Collection:
 
         print(self.conn, self.cursor, self.collection_name)
 
-    def add(self, ids, embeddings, documents):
+    def add(self, ids, documents, embeddings=None):
+        if embeddings == None:
+            embeddings = model.encode(documents)
+
         for i in range(len(ids)):
             id = f"'{ids[i]}'"
             document = f"'{documents[i]}'"
@@ -85,7 +94,10 @@ class Collection:
 
         return result
     
-    def update(self, ids, embeddings, documents):
+    def update(self, ids, documents, embeddings=None):
+        if embeddings == None:
+            embeddings = model.encode(documents)
+            
         for i in range(len(ids)):
             id = f"'{ids[i]}'"
             document = f"'{documents[i]}'"

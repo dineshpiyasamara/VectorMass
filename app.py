@@ -1,6 +1,9 @@
 import VectorMass
 import numpy as np
 
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
 # Create a VectorStore instance
 vector_store = VectorMass.Client()
 
@@ -15,27 +18,9 @@ sentences = [
     "fruits are good for health",
 ]
 
-# Tokenization and Vocabulary Creation
-vocabulary = set()
-for sentence in sentences:
-    tokens = sentence.lower().split()
-    vocabulary.update(tokens)
-
-# Assign unique indices to words in the vocabulary
-word_to_index = {word: i for i, word in enumerate(vocabulary)}
-
-# Vectorization
-# sentence_vectors = {}
-embeddings = []
-for sentence in sentences:
-    tokens = sentence.lower().split()
-    vector = np.zeros(len(vocabulary))
-    for token in tokens:
-        vector[word_to_index[token]] += 1
-    embeddings.append(vector)
-#     sentence_vectors[sentence] = vector
-
-# print(sentence_vectors)
+# embeddings = model.encode(sentences)
+# print(embeddings)
+# print(type(embeddings[0]))
 
 collection = vector_store.create_or_get_collection("coll_name")
 print(collection.collection_name)
@@ -43,11 +28,9 @@ print(collection.collection_name)
 ids = ['id1', 'id2', 'id3', 'id4']
 print(ids)
 print(sentences)
-print(embeddings)
 
 collection.add(
     ids= ids,
-    embeddings= embeddings,
     documents=sentences
 )
 
@@ -69,11 +52,11 @@ collection.add(
 result = collection.get_all()
 print(result)
 
-result = collection.delete(['id1', 'id3'])
-print(result)
+# result = collection.delete(['id1', 'id3'])
+# print(result)
 
-result = collection.get_all()
-print(result)
+# result = collection.get_all()
+# print(result)
 
 # # Storing in VectorStore
 # for sentence, vector in sentence_vectors.items():
