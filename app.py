@@ -2,7 +2,7 @@ import VectorMass
 import numpy as np
 
 from sentence_transformers import SentenceTransformer
-model = SentenceTransformer('all-MiniLM-L6-v2')
+model = SentenceTransformer('all-mpnet-base-v2')
 
 # Create a VectorStore instance
 vector_store = VectorMass.Client()
@@ -31,7 +31,8 @@ print(sentences)
 
 collection.add(
     ids= ids,
-    documents=sentences
+    documents=sentences,
+    embedding_model=model
 )
 
 # collection.update(

@@ -7,8 +7,6 @@ import ast
 config_manager = ConfigurationManager()
 config = config_manager.embedding_config()
 
-model = SentenceTransformer(config.default_embedding_model)
-
 class Collection:
     def __init__(self, conn, cursor, collection_name):
         self.conn = conn
@@ -17,9 +15,9 @@ class Collection:
 
         print(self.conn, self.cursor, self.collection_name)
 
-    def add(self, ids, documents, embeddings=None):
+    def add(self, ids, documents, embeddings=None, embedding_model=SentenceTransformer(config.default_embedding_model)):
         if embeddings == None:
-            embeddings = model.encode(documents)
+            embeddings = embedding_model.encode(documents)
 
         for i in range(len(ids)):
             id = f"'{ids[i]}'"
@@ -94,10 +92,10 @@ class Collection:
 
         return result
     
-    def update(self, ids, documents, embeddings=None):
+    def update(self, ids, documents, embeddings=None, embedding_model=SentenceTransformer(config.default_embedding_model)):
         if embeddings == None:
-            embeddings = model.encode(documents)
-            
+            embeddings = embedding_model.encode(documents)
+
         for i in range(len(ids)):
             id = f"'{ids[i]}'"
             document = f"'{documents[i]}'"
