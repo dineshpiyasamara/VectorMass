@@ -13,14 +13,18 @@ class Collection:
         self.conn = conn
         self.cursor = cursor
         self.collection_name = collection_name
+        self.embedding_model = None
 
         print(self.conn, self.cursor, self.collection_name)
 
     def add(self, ids, documents, embeddings=None, embedding_model=None):
-        if embeddings == None:
-            if embedding_model == None:
-                embedding_model = SentenceTransformer(config.default_embedding_model)
-            embeddings = embedding_model.encode(documents)
+        if embedding_model == None:
+            self.embedding_model = SentenceTransformer(config.default_embedding_model)
+        else:
+            self.embedding_model = embedding_model
+            
+        embeddings = self.embedding_model.encode(documents)
+
 
         for i in range(len(ids)):
             id = f"'{ids[i]}'"
@@ -95,11 +99,9 @@ class Collection:
 
         return result
     
-    def update(self, ids, documents, embeddings=None, embedding_model=None):
+    def update(self, ids, documents, embeddings=None):
         if embeddings == None:
-            if embedding_model == None:
-                embedding_model = SentenceTransformer(config.default_embedding_model)
-            embeddings = embedding_model.encode(documents)
+            embeddings = self.embedding_model.encode(documents)
 
         for i in range(len(ids)):
             id = f"'{ids[i]}'"
@@ -142,8 +144,12 @@ class Collection:
         result = {
             'ids': [],
             'documents': [],
-            'distances': [] 
+            'distances': []
         }
+
+        if query_documents is not None and query_embeddings is None:
+            query_embeddings = self.embedding_model.encode(query_documents)
+
         if query_embeddings is not None:
             results = self.get_all()
             embeddings = results['embeddings']
