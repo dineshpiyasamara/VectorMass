@@ -2,6 +2,7 @@ import numpy as np
 from VectorMass.queries.queries import *
 from VectorMass.config.configuration import ConfigurationManager
 from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
 import ast
 
 config_manager = ConfigurationManager()
@@ -15,8 +16,10 @@ class Collection:
 
         print(self.conn, self.cursor, self.collection_name)
 
-    def add(self, ids, documents, embeddings=None, embedding_model=SentenceTransformer(config.default_embedding_model)):
+    def add(self, ids, documents, embeddings=None, embedding_model=None):
         if embeddings == None:
+            if embedding_model == None:
+                embedding_model = SentenceTransformer(config.default_embedding_model)
             embeddings = embedding_model.encode(documents)
 
         for i in range(len(ids)):
@@ -92,8 +95,10 @@ class Collection:
 
         return result
     
-    def update(self, ids, documents, embeddings=None, embedding_model=SentenceTransformer(config.default_embedding_model)):
+    def update(self, ids, documents, embeddings=None, embedding_model=None):
         if embeddings == None:
+            if embedding_model == None:
+                embedding_model = SentenceTransformer(config.default_embedding_model)
             embeddings = embedding_model.encode(documents)
 
         for i in range(len(ids)):
@@ -114,6 +119,7 @@ class Collection:
         self.conn.commit()
         print("Done.")
 
+
     def delete(self, ids):
         for i in range(len(ids)):
             id = f"'{ids[i]}'"
@@ -130,3 +136,44 @@ class Collection:
 
         self.conn.commit()
         print("Done.")
+
+
+    def query(self, query_documents=None, query_embeddings=None, num_results=2):
+        result = {
+            'ids': [],
+            'documents': [],
+            'distances': [] 
+        }
+        if query_embeddings is not None:
+            results = self.get_all()
+            embeddings = results['embeddings']
+
+            ids = results['ids']
+            documents = results['documents']
+
+            similarities_list = []
+            for query_embedding in query_embeddings:
+                similarities = [1 - cosine_similarity([query_embedding], [embedding]) for embedding in embeddings]
+                similarities_list.append(similarities)
+            
+            for similarities in similarities_list:
+                print(similarities)
+                values = [arr[0][0] for arr in similarities]
+                indices = np.argsort(values)[::1][:num_results]  # Indices of maximum two values in descending order
+
+                temp_ids = []
+                temp_documents = []
+                temp_distances = []
+
+                for i in indices:
+                    temp_ids.append(ids[i])
+                    temp_documents.append(documents[i])
+                    temp_distances.append(similarities[i])
+                
+                result['ids'].append(temp_ids)
+                result['documents'].append(temp_documents)
+                result['distances'].append(temp_distances)
+        return result
+
+
+
