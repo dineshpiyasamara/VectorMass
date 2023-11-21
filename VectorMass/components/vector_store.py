@@ -57,7 +57,7 @@ class Client:
             print(f"Collection '{collection_name}' already exists.")
         else:
             # Create the collection if it doesn't exist
-            self.cursor.execute(CREATE_COLLECTION, {'collection_name':collection_name})
+            self.cursor.execute(CREATE_COLLECTION, (collection_name,))
             print(f"Collection '{collection_name}' created.")
         self.conn.commit()
         collection = Collection(conn=self.conn, cursor=self.cursor, collection_name=collection_name)
@@ -73,7 +73,7 @@ class Client:
             print(f"Collection '{collection_name}' already exists.")
         else:
             # Create the collection if it doesn't exist
-            self.cursor.execute(CREATE_COLLECTION, {'collection_name':collection_name})
+            self.cursor.execute(CREATE_COLLECTION, (collection_name,))
             print(f"Collection '{collection_name}' created.")
         
         self.conn.commit()
