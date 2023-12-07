@@ -27,16 +27,12 @@ class Collection:
             document = f"'{documents[i]}'"
             embedding = f"'{list(embeddings[i])}'"
 
-            query_to_check_exist = CHECK_ID_EXIST ,(self.collection_name, id, )
-            print(query_to_check_exist)
-            check_exist = self.cursor.execute(query_to_check_exist).fetchone()[0]
+            check_exist = self.cursor.execute(CHECK_ID_EXIST.format(self.collection_name, id)).fetchone()[0]
 
             if check_exist > 0:
                 print(f"{id} already exist")
             else:
-                query = INSERT_RECORD , (self.collection_name, id, document, embedding,)
-                print(query)
-                self.cursor.execute(query)
+                self.cursor.execute(INSERT_RECORD.format(self.collection_name, id, document, embedding))
 
         self.conn.commit()
         print("Done.")
@@ -50,9 +46,7 @@ class Collection:
         }
         for i in range(len(ids)):
             id = f"'{ids[i]}'"
-            query = GET_RECORD, (self.collection_name, id,)
-            print(query)
-            row = self.cursor.execute(query).fetchall()
+            row = self.cursor.execute(GET_RECORD.format(self.collection_name, id)).fetchall()
             print(row[0][2])
             print(type(row[0][2]))
             
@@ -66,8 +60,7 @@ class Collection:
     def get_one(self, id):
         result = dict()
         id = f"'{id}'"
-        query = GET_RECORD, (self.collection_name, id,)
-        row = self.cursor.execute(query).fetchall()
+        row = self.cursor.execute(GET_RECORD.format(self.collection_name, id)).fetchall()
 
         item_id, item_document, item_embedding = row[0][0], row[0][1], ast.literal_eval(row[0][2])
 
@@ -84,9 +77,7 @@ class Collection:
             'embeddings': []
         }
 
-        query = GET_ALL_RECORDS , (self.collection_name,)
-        print(query)
-        rows = self.cursor.execute(query).fetchall()
+        rows = self.cursor.execute(GET_ALL_RECORDS.format(self.collection_name)).fetchall()
         
         for row in rows:
             item_id, item_document, item_embedding = row[0], row[1], ast.literal_eval(row[2])
@@ -107,13 +98,10 @@ class Collection:
             document = f"'{documents[i]}'"
             embedding = f"'{list(embeddings[i])}'"
 
-            query_to_check_exist = CHECK_ID_EXIST ,(self.collection_name, id,)
-            check_exist = self.cursor.execute(query_to_check_exist).fetchone()[0]
+            check_exist = self.cursor.execute(CHECK_ID_EXIST.format(self.collection_name, id)).fetchone()[0]
 
             if check_exist > 0:
-                query = UPDATE_RECORD ,(self.collection_name, document, embedding, id,)
-                print(query)
-                self.cursor.execute(query)
+                self.cursor.execute(UPDATE_RECORD.format(self.collection_name, document, embedding, id))
             else:
                 print(f"Unable to find {id}")
 
@@ -125,13 +113,10 @@ class Collection:
         for i in range(len(ids)):
             id = f"'{ids[i]}'"
 
-            query_to_check_exist = CHECK_ID_EXIST ,(self.collection_name, id,)
-            check_exist = self.cursor.execute(query_to_check_exist).fetchone()[0]
+            check_exist = self.cursor.execute(CHECK_ID_EXIST.format(self.collection_name, id)).fetchone()[0]
 
             if check_exist > 0:
-                query = DELETE_RECORD, (self.collection_name, id,)
-                print(query)
-                self.cursor.execute(query)
+                self.cursor.execute(DELETE_RECORD.format(self.collection_name, id))
             else:
                 print(f"Unable to find {id}")       
 

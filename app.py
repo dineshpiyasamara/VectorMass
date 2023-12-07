@@ -22,7 +22,7 @@ sentences = [
 # print(embeddings)
 # print(type(embeddings[0]))
 
-collection = vector_store.create_or_get_collection("coll_name")
+collection = vector_store.create_or_get_collection("collection_one")
 print(collection.collection_name)
 
 ids = ['id1', 'id2', 'id3', 'id4']
