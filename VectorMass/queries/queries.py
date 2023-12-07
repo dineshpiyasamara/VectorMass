@@ -1,16 +1,19 @@
-
 CHECK_COLLECTION_EXIST = "SELECT name FROM sqlite_master WHERE type='table' AND name=?"
 
-CREATE_COLLECTION = "CREATE TABLE ? (id TEXT PRIMARY KEY, document TEXT, embedding BLOB)"
+CREATE_COLLECTION = "CREATE TABLE {} (id TEXT PRIMARY KEY, document TEXT, embedding BLOB)"
 
-INSERT_RECORD = "INSERT INTO ? (id, document, embedding) VALUES (?, ?, ?)"
+GET_ALL_COLLECTIONS = "SELECT name FROM sqlite_master WHERE type = 'table'"
 
-GET_RECORD = "SELECT * FROM ? WHERE id=?"
+DROP_COLLECTION = "DROP TABLE {}"
 
-GET_ALL_RECORDS = "SELECT * FROM ?"
+INSERT_RECORD = "INSERT INTO {} (id, document, embedding) VALUES ({}, {}, {})"
 
-CHECK_ID_EXIST = "SELECT COUNT(*) FROM ? WHERE id = ?"
+GET_RECORD = "SELECT * FROM {} WHERE id={}"
 
-UPDATE_RECORD = "UPDATE ? SET document = ?, embedding = ? WHERE id = ?"
+GET_ALL_RECORDS = "SELECT * FROM {}"
 
-DELETE_RECORD = "DELETE FROM ? WHERE id = ?"
+CHECK_ID_EXIST = "SELECT COUNT(*) FROM {} WHERE id = {}"
+
+UPDATE_RECORD = "UPDATE {} SET document = {}, embedding = {} WHERE id = {}"
+
+DELETE_RECORD = "DELETE FROM {} WHERE id = {}"

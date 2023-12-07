@@ -1,4 +1,3 @@
-import numpy as np
 import sqlite3
 from sqlite3 import Error
 import os
@@ -92,3 +91,28 @@ class Client:
             print(f"Collection '{collection_name}' not found.")
             return None
 
+
+    def drop_collection(self, collection_name):
+        try:
+            self.cursor.execute(CHECK_COLLECTION_EXIST, (collection_name,))
+            collection_exists = self.cursor.fetchone()
+            if collection_exists:
+                self.cursor.execute(DROP_COLLECTION.format(collection_name))
+                self.conn.commit()
+                print(f"Collection '{collection_name}' succesfully deleted.")
+            else:
+                print(f"Collection '{collection_name}' not found.")
+        except Exception as e:
+            logger.error(e)
+    
+    def reset_vectorstore(self):
+        try:
+            self.cursor.execute(GET_ALL_COLLECTIONS)
+            collections = self.cursor.fetchall()
+            for collection in collections:
+                collection_name = collection[0]
+                self.cursor.execute(DROP_COLLECTION.format(collection_name))
+            self.conn.commit()
+            logger.info("Vector Store reset succesfull")
+        except Exception as e:
+            logger.error(e)
