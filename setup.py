@@ -3,9 +3,9 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as f:
     LONG_DESCRIPTION = f.read()
 
-required_libraries = [i.strip() for i in open("requirements.txt").readlines()]
+required_libraries = [i.strip() for i in open("requires.txt").readlines()]
 
-VERSION = '0.0.7'
+VERSION = '0.0.8'
 DESCRIPTION = 'Highly flexible vector store'
 
 setup(
