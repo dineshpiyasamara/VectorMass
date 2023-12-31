@@ -1,5 +1,4 @@
 from VectorMass.constants import *
-from VectorMass.utils.common import read_yaml, create_directories
 from VectorMass.entity import (DatabaseConfig, EmbeddingConfig)
 
 class ConfigurationManager:

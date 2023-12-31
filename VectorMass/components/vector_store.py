@@ -4,7 +4,6 @@ import os
 from .collection_operations import (Collection)
 from VectorMass.config.configuration import ConfigurationManager
 from VectorMass.queries.queries import *
-from VectorMass.utils.common import create_directories
 from VectorMass.logging import logger
 
 config_manager = ConfigurationManager()

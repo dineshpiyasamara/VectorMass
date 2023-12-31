@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 required_libraries = [i.strip() for i in open("requirements.txt").readlines()]
 
-VERSION = '0.0.9'
+VERSION = '0.0.10'
 DESCRIPTION = 'Highly flexible vector store'
 
 setup(
