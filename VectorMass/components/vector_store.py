@@ -49,18 +49,21 @@ class Client:
         Returns:
             Collection object
         """
-        self.cursor.execute(CHECK_COLLECTION_EXIST, (collection_name,))
-        collection_exists = self.cursor.fetchone()
+        try:
+            self.cursor.execute(CHECK_COLLECTION_EXIST, (collection_name,))
+            collection_exists = self.cursor.fetchone()
 
-        if collection_exists:
-            logger.info(f"Collection '{collection_name}' already exists.")
-        else:
-            # Create the collection if it doesn't exist
-            self.cursor.execute(CREATE_COLLECTION, (collection_name,))
-            logger.info(f"Collection '{collection_name}' created.")
-        self.conn.commit()
-        collection = Collection(conn=self.conn, cursor=self.cursor, collection_name=collection_name)
-        return collection
+            if collection_exists:
+                logger.info(f"Collection '{collection_name}' already exists.")
+            else:
+                # Create the collection if it doesn't exist
+                self.cursor.execute(CREATE_COLLECTION.format(collection_name))
+                logger.info(f"Collection '{collection_name}' created.")
+            self.conn.commit()
+            collection = Collection(conn=self.conn, cursor=self.cursor, collection_name=collection_name)
+            return collection
+        except:
+            return None
 
 
     def drop_collection(self, collection_name):

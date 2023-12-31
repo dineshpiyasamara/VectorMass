@@ -15,8 +15,6 @@ class Collection:
         self.cursor = cursor
         self.collection_name = collection_name
 
-        logger.info(self.conn, self.cursor, self.collection_name)
-
     def add(self, ids, documents, embeddings=None, embedding_model=None):
         if embeddings == None:
             if embedding_model == None:
