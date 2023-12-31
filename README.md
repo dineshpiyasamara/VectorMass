@@ -1,4 +1,5 @@
 # VectorMass
+![VectorMass vector database](https://github.com/dineshpiyasamara/VectorMass/blob/main/VectorMass/utils/vectormass_logo.png?raw=true){:height="150px" width="150px" align=center}
 
 Vector databases are used to store vector embeddings for fast retrieval, similarity search, and other operations like crud operations. Simply, embedding is a numerical array that includes a huge number of features. So, using vector databases we can perform a lot of useful things on that numerical representation.
 
