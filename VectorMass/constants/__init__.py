@@ -1,3 +1,3 @@
-from pathlib import Path
+DB_NAME = "mass.db"
 
-CONFIG_FILE_PATH = Path("config/config.yaml")
+DEFAULT_EMBEDDING_MODEL = "all-MiniLM-L6-v2"
