@@ -3,10 +3,9 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as f:
     LONG_DESCRIPTION = f.read()
 
-with open('requirements.txt') as f:
-    required_libraries = f.read().splitlines()
+required_libraries = [i.strip() for i in open("requirements.txt").readlines()]
 
-VERSION = '0.0.2'
+VERSION = '0.0.7'
 DESCRIPTION = 'Highly flexible vector store'
 
 setup(
@@ -27,7 +26,7 @@ setup(
     keywords=['vector database', 'vector store'],
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Development Status :: Developing",
+        "Development Status :: 1 - Planning",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
         "Operating System :: Unix",
