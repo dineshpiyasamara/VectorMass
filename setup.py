@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
 with open('requirements.txt') as f:
     required_libraries = f.read().splitlines()
 
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 DESCRIPTION = 'Highly flexible vector store'
 
 setup(
@@ -27,7 +27,7 @@ setup(
     keywords=['vector database', 'vector store'],
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Development Status :: 1 - Planning",
+        "Development Status :: Developing",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
         "Operating System :: Unix",

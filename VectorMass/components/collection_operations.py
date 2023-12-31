@@ -4,6 +4,7 @@ from VectorMass.config.configuration import ConfigurationManager
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import ast
+from VectorMass.logging import logger
 
 config_manager = ConfigurationManager()
 config = config_manager.embedding_config()
@@ -14,7 +15,7 @@ class Collection:
         self.cursor = cursor
         self.collection_name = collection_name
 
-        print(self.conn, self.cursor, self.collection_name)
+        logger.info(self.conn, self.cursor, self.collection_name)
 
     def add(self, ids, documents, embeddings=None, embedding_model=None):
         if embeddings == None:
@@ -30,12 +31,12 @@ class Collection:
             check_exist = self.cursor.execute(CHECK_ID_EXIST.format(self.collection_name, id)).fetchone()[0]
 
             if check_exist > 0:
-                print(f"{id} already exist")
+                logger.info(f"{id} already exist")
             else:
                 self.cursor.execute(INSERT_RECORD.format(self.collection_name, id, document, embedding))
 
         self.conn.commit()
-        print("Done.")
+        logger.info("Done.")
 
 
     def get(self, ids):
@@ -47,8 +48,6 @@ class Collection:
         for i in range(len(ids)):
             id = f"'{ids[i]}'"
             row = self.cursor.execute(GET_RECORD.format(self.collection_name, id)).fetchall()
-            print(row[0][2])
-            print(type(row[0][2]))
             
             item_id, item_document, item_embedding = row[0][0], row[0][1], ast.literal_eval(row[0][2])
             result['ids'].append(item_id)
@@ -102,11 +101,11 @@ class Collection:
 
             if check_exist > 0:
                 self.cursor.execute(UPDATE_RECORD.format(self.collection_name, document, embedding, id))
+                logger.info("Done.")
             else:
-                print(f"Unable to find {id}")
+                logger.info(f"Unable to find {id}")
 
         self.conn.commit()
-        print("Done.")
 
 
     def delete(self, ids):
@@ -117,11 +116,11 @@ class Collection:
 
             if check_exist > 0:
                 self.cursor.execute(DELETE_RECORD.format(self.collection_name, id))
+                logger.info("Done.")
             else:
-                print(f"Unable to find {id}")       
+                logger.info(f"Unable to find {id}")       
 
         self.conn.commit()
-        print("Done.")
 
 
     def query(self, query_documents=None, query_embeddings=None, num_results=2):
@@ -143,7 +142,6 @@ class Collection:
                 similarities_list.append(similarities)
             
             for similarities in similarities_list:
-                print(similarities)
                 values = [arr[0][0] for arr in similarities]
                 indices = np.argsort(values)[::1][:num_results]  # Indices of maximum two values in descending order
 

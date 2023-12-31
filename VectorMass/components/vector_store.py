@@ -4,7 +4,7 @@ import os
 from .collection_operations import (Collection)
 from VectorMass.config.configuration import ConfigurationManager
 from VectorMass.queries.queries import *
-from VectorMass.utils.common import read_yaml, create_directories
+from VectorMass.utils.common import create_directories
 from VectorMass.logging import logger
 
 config_manager = ConfigurationManager()
@@ -35,7 +35,7 @@ class Client:
             db_path = os.path.join(db_path, self.config.db_name)
             conn = sqlite3.connect(db_path)
         except Error as e:
-            print(e)
+            logger.info(e)
         finally:
             return conn
 
@@ -53,59 +53,39 @@ class Client:
         collection_exists = self.cursor.fetchone()
 
         if collection_exists:
-            print(f"Collection '{collection_name}' already exists.")
+            logger.info(f"Collection '{collection_name}' already exists.")
         else:
             # Create the collection if it doesn't exist
             self.cursor.execute(CREATE_COLLECTION, (collection_name,))
-            print(f"Collection '{collection_name}' created.")
+            logger.info(f"Collection '{collection_name}' created.")
         self.conn.commit()
         collection = Collection(conn=self.conn, cursor=self.cursor, collection_name=collection_name)
         return collection
-    
-
-    def create_collection(self, collection_name):
-        # Check if the collection already exists
-        self.cursor.execute(CHECK_COLLECTION_EXIST, (collection_name,))
-        collection_exists = self.cursor.fetchone()
-
-        if collection_exists:
-            print(f"Collection '{collection_name}' already exists.")
-        else:
-            # Create the collection if it doesn't exist
-            self.cursor.execute(CREATE_COLLECTION, (collection_name,))
-            print(f"Collection '{collection_name}' created.")
-        
-        self.conn.commit()
-
-
-    def get_collection(self, collection_name):
-        # Check if the collection already exists
-        self.cursor.execute(CHECK_COLLECTION_EXIST, (collection_name,))
-        collection_exists = self.cursor.fetchone()
-
-        if collection_exists:
-            print(f"Collection '{collection_name}' already exists.")
-            collection = Collection(conn=self.conn, cursor=self.cursor, collection_name=collection_name)
-            return collection
-        else:
-            print(f"Collection '{collection_name}' not found.")
-            return None
 
 
     def drop_collection(self, collection_name):
+        """
+        Drop a collection
+
+        Args:
+            collection_name (str): Name of the collection
+        """
         try:
             self.cursor.execute(CHECK_COLLECTION_EXIST, (collection_name,))
             collection_exists = self.cursor.fetchone()
             if collection_exists:
                 self.cursor.execute(DROP_COLLECTION.format(collection_name))
                 self.conn.commit()
-                print(f"Collection '{collection_name}' succesfully deleted.")
+                logger.info(f"Collection '{collection_name}' succesfully deleted.")
             else:
-                print(f"Collection '{collection_name}' not found.")
+                logger.info(f"Collection '{collection_name}' not found.")
         except Exception as e:
             logger.error(e)
     
     def reset_vectorstore(self):
+        """
+        Reset vectorstore
+        """
         try:
             self.cursor.execute(GET_ALL_COLLECTIONS)
             collections = self.cursor.fetchall()
