@@ -59,5 +59,9 @@ print(result)
 Embeddings, in the context of machine learning and natural language processing (NLP), refer to numerical representations of words, sentences, or documents in a high-dimensional space. 
 In <b>VectorMass</b> databse, use [<b>Sentence Transformer</b>](https://www.sbert.net/) embeddings as default embeddings. Upto now, it supports only embedding models which is in [<b>Sentence Transformer</b>](https://www.sbert.net/).
 
+### Examples
+
+Notebook 01: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1p6uvElhU5EsA9FDvdDRYcrpWiRTb0Gi_?usp=sharing)
+
 ### License
 [Apache 2.0](https://en.wikipedia.org/wiki/Apache_License)
